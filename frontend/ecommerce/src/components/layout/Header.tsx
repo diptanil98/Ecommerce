@@ -9,13 +9,15 @@ interface HeaderProps {
   onCartToggle: () => void;
   onMenuToggle: () => void;
   isMenuOpen: boolean;
+  onProfileOpen: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
   onSearchChange,
   onCartToggle,
   onMenuToggle,
-  isMenuOpen
+  isMenuOpen,
+  onProfileOpen
 }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -34,6 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
     logout();
     setIsUserMenuOpen(false);
   };
+  
 
   return (
     <>
@@ -101,7 +104,10 @@ export const Header: React.FC<HeaderProps> = ({
                         {user?.email}
                       </div>
                       <button
-                        onClick={() => setIsUserMenuOpen(false)}
+                        onClick={() => {
+                          setIsUserMenuOpen(false);
+                          onProfileOpen();
+                        }}
                         className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                       >
                         <User className="inline mr-2" size={16} />

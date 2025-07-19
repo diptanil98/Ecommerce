@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import type { Product, FilterState } from '../types';
-import { products } from '../data/products';
+import { useDisplayProduct } from './useDisplayProduct';
 
 export const useProducts = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -13,6 +13,7 @@ export const useProducts = () => {
     sortBy: 'name',
     sortOrder: 'asc'
   });
+  const {products,loading} = useDisplayProduct();
 
   const filteredProducts = useMemo(() => {
     let filtered = products.filter(product => {

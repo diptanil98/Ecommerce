@@ -11,14 +11,14 @@ const categories = [
   },
   {
     icon: Coffee,
-    name: 'Food & Beverages',
+    name: 'Clothing',
     description: 'Gourmet and organic',
     image: 'https://images.pexels.com/photos/1695052/pexels-photo-1695052.jpeg?auto=compress&cs=tinysrgb&w=500',
     color: 'from-orange-500 to-red-500'
   },
   {
     icon: Armchair,
-    name: 'Furniture',
+    name: 'Home',
     description: 'Comfort meets style',
     image: 'https://images.pexels.com/photos/3952048/pexels-photo-3952048.jpeg?auto=compress&cs=tinysrgb&w=500',
     color: 'from-green-500 to-teal-500'

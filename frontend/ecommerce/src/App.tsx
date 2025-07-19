@@ -11,6 +11,7 @@ import { CartSidebar } from './components/cart/CartSidebar';
 import { CheckoutModal } from './components/checkout/CheckoutModal';
 import { ReceiptModal } from './components/receipt/ReceiptModal';
 import { useProducts } from './hooks/useProducts';
+import { ProfilePage } from './components/profile/ProfilePage';
 import type { Product, Order } from './types';
 
 function App() {
@@ -21,6 +22,7 @@ function App() {
   const [isReceiptOpen, setIsReceiptOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [currentOrder, setCurrentOrder] = useState<Order | null>(null);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const {
     products,
@@ -65,6 +67,7 @@ function App() {
               onCartToggle={() => setIsCartOpen(true)}
               onMenuToggle={() => setIsSidebarOpen(true)}
               isMenuOpen={isSidebarOpen}
+              onProfileOpen={() => setIsProfileOpen(true)}
             />
             
             <LandingPage
@@ -89,7 +92,10 @@ function App() {
               onClose={() => setIsReceiptOpen(false)}
               order={currentOrder}
             />
-
+ <ProfilePage
+            isOpen={isProfileOpen}
+            onClose={() => setIsProfileOpen(false)}
+          />
             <Toaster
               position="top-right"
               toastOptions={{
@@ -115,6 +121,7 @@ function App() {
             onCartToggle={() => setIsCartOpen(true)}
             onMenuToggle={() => setIsSidebarOpen(true)}
             isMenuOpen={isSidebarOpen}
+            onProfileOpen={() => setIsProfileOpen(true)}
           />
 
           <div className="flex">
@@ -179,6 +186,11 @@ function App() {
             isOpen={isReceiptOpen}
             onClose={() => setIsReceiptOpen(false)}
             order={currentOrder}
+          />
+
+          <ProfilePage
+            isOpen={isProfileOpen}
+            onClose={() => setIsProfileOpen(false)}
           />
 
           <Toaster

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useReducer, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { User, AuthState } from '../types';
 import toast from 'react-hot-toast';
+import axios from "axios";
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<boolean>;
@@ -9,6 +10,7 @@ interface AuthContextType extends AuthState {
   logout: () => void;
   forgotPassword: (email: string) => Promise<boolean>;
   updateProfile: (userData: Partial<User>) => void;
+  getProfile: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -48,82 +50,47 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   });
 
   useEffect(() => {
-    const savedUser = localStorage.getItem('user');
-    if (savedUser) {
-      try {
-        const user = JSON.parse(savedUser);
-        dispatch({ type: 'LOGIN_SUCCESS', payload: user });
-      } catch (error) {
-        localStorage.removeItem('user');
-      }
-    }
+    getProfile();
   }, []);
+
+  const API_URL = "http://localhost:8765/users";
 
   const login = async (email: string, password: string): Promise<boolean> => {
     dispatch({ type: 'LOGIN_START' });
-    
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Get users from localStorage
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      const user = users.find((u: User) => u.email === email);
-      
-      if (user && password === 'password') { // Simple password check for demo
-        localStorage.setItem('user', JSON.stringify(user));
-        dispatch({ type: 'LOGIN_SUCCESS', payload: user });
-        toast.success('Login successful!');
-        return true;
-      } else {
-        throw new Error('Invalid credentials');
-      }
-    } catch (error) {
+      const res = await axios.post(`${API_URL}/login`, { email, password });
+      const { token, data } = res.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      dispatch({ type: 'LOGIN_SUCCESS', payload: data.user });
+      toast.success('Login successful!');
+      return true;
+    } catch (error: any) {
       dispatch({ type: 'LOGIN_FAILURE' });
-      toast.error('Invalid email or password');
+      toast.error(error.response?.data?.message || 'Invalid email or password');
       return false;
     }
   };
 
   const register = async (name: string, email: string, password: string): Promise<boolean> => {
     dispatch({ type: 'LOGIN_START' });
-    
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      // Get existing users
-      const users = JSON.parse(localStorage.getItem('users') || '[]');
-      
-      // Check if user already exists
-      if (users.some((u: User) => u.email === email)) {
-        throw new Error('User already exists');
-      }
-      
-      // Create new user
-      const newUser: User = {
-        id: Date.now().toString(),
-        name,
-        email,
-        createdAt: new Date()
-      };
-      
-      // Save to localStorage
-      users.push(newUser);
-      localStorage.setItem('users', JSON.stringify(users));
-      localStorage.setItem('user', JSON.stringify(newUser));
-      
-      dispatch({ type: 'LOGIN_SUCCESS', payload: newUser });
+      const res = await axios.post(`${API_URL}/register`, { fullName: name, email, password });
+      const { token, data } = res.data;
+      localStorage.setItem('token', token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      dispatch({ type: 'LOGIN_SUCCESS', payload: data.user });
       toast.success('Registration successful!');
       return true;
-    } catch (error) {
+    } catch (error: any) {
       dispatch({ type: 'LOGIN_FAILURE' });
-      toast.error(error instanceof Error ? error.message : 'Registration failed');
+      toast.error(error.response?.data?.message || 'Registration failed');
       return false;
     }
   };
 
   const logout = () => {
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
     dispatch({ type: 'LOGOUT' });
     toast.success('Logged out successfully');
@@ -158,6 +125,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const getProfile = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) return;
+    try {
+      const res = await axios.get(`${API_URL}/me`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      dispatch({ type: 'LOGIN_SUCCESS', payload: res.data.data.user });
+    } catch {
+      logout();
+    }
+  };
+
   return (
     <AuthContext.Provider value={{
       ...state,
@@ -165,7 +145,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       register,
       logout,
       forgotPassword,
-      updateProfile
+      updateProfile,
+      getProfile
     }}>
       {children}
     </AuthContext.Provider>
