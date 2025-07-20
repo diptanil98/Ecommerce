@@ -1,8 +1,10 @@
 export interface User {
-  id: string;
+  _id: string;
   email: string;
   fullName: string;
   createdAt: Date;
+  phoneNumber: string;
+  address: string;
 }
 
 export interface Product {

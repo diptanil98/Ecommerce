@@ -7,7 +7,7 @@ const auth = require('../middleware/auth');
 // Register a new user
 router.post('/register', async (req, res) => {
   try {
-    const { fullName, email, password } = req.body;
+    const { fullName, email, password, phone, address } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -19,7 +19,9 @@ router.post('/register', async (req, res) => {
     const user = await User.create({
       fullName,
       email,
-      password
+      password,
+      phone,
+      address
     });
 
     // Generate JWT token

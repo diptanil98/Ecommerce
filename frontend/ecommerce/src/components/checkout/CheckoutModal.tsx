@@ -4,6 +4,7 @@ import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
 import type { Order } from '../../types';
 import toast from 'react-hot-toast';
+import axios from 'axios';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -17,15 +18,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
   
   const [formData, setFormData] = useState({
     email: user?.email || '',
-    name: user?.name || '',
-    phone: user?.phone || '',
+    name: user?.fullName || '',
+    phone: user?.phoneNumber || '',
     address: user?.address || '',
     city: '',
     zipCode: '',
-    cardNumber: '',
-    expiryDate: '',
-    cvv: '',
-    cardName: ''
   });
 
   const [isProcessing, setIsProcessing] = useState(false);
@@ -35,39 +32,94 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
 
     try {
-      // Simulate payment processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Load Razorpay script
+      const razorpayLoaded = await loadRazorpayScript();
+      if (!razorpayLoaded) {
+        throw new Error('Razorpay SDK failed to load');
+      }
 
-      // Create order
-      const order: Order = {
-        id: Date.now().toString(),
-        userId: user?.id || 'guest',
-        items,
-        total,
-        status: 'processing',
-        paymentId: 'razorpay_' + Date.now(),
-        createdAt: new Date(),
-        shippingAddress: `${formData.address}, ${formData.city}, ${formData.zipCode}`,
-        billingAddress: `${formData.address}, ${formData.city}, ${formData.zipCode}`
+      // Create Razorpay order
+      const orderResponse = await axios.post('http://localhost:8765/orders/create-order', {
+        amount: total,
+        currency: 'INR',
+        receipt: `order_${Date.now()}`,
+      });
+
+      const { id: razorpayOrderId, currency, amount } = orderResponse.data;
+
+      // Razorpay options
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: amount.toString(),
+        currency,
+        name: 'Your Store Name',
+        description: 'Payment for your order',
+        order_id: razorpayOrderId,
+        handler: async (response: any) => {
+          try {
+            // Save order to backend
+            const savedOrder = await axios.post('http://localhost:8765/orders/save-order', {
+              userId: user?._id,
+              products: items.map(item => ({
+                productId: item.product.id,
+                quantity: item.quantity,
+                price: item.product.price
+              })),
+              amount: total,
+              paymentId: response.razorpay_payment_id,
+              orderId: razorpayOrderId,
+              status: 'paid'
+            });
+
+            // Clear cart
+            clearCart();
+
+            toast.success('Payment successful! Order placed.');
+            onOrderComplete(savedOrder.data.order);
+            onClose();
+          } catch (error) {
+            console.error('Error saving order:', error);
+            toast.error('Order could not be saved. Please contact support.');
+          }
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone
+        },
+        notes: {
+          address: `${formData.address}, ${formData.city}, ${formData.zipCode}`
+        },
+        theme: {
+          color: '#3399cc'
+        }
       };
 
-      // Save order to localStorage
-      const existingOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-      existingOrders.push(order);
-      localStorage.setItem('orders', JSON.stringify(existingOrders));
+      // Open Razorpay payment modal
+      const razorpayInstance = new (window as any).Razorpay(options);
+      razorpayInstance.open();
 
-      // Clear cart
-      clearCart();
-
-      toast.success('Order placed successfully!');
-      onOrderComplete(order);
-      onClose();
     } catch (error) {
+      console.error('Payment error:', error);
       toast.error('Payment failed. Please try again.');
     } finally {
       setIsProcessing(false);
@@ -206,83 +258,12 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
                   </div>
                 </div>
 
-                {/* Payment Information */}
-                <div>
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4">Payment Information</h3>
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Card Number
-                      </label>
-                      <div className="relative">
-                        <CreditCard className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                        <input
-                          type="text"
-                          name="cardNumber"
-                          value={formData.cardNumber}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="1234 5678 9012 3456"
-                        />
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          Expiry Date
-                        </label>
-                        <input
-                          type="text"
-                          name="expiryDate"
-                          value={formData.expiryDate}
-                          onChange={handleInputChange}
-                          required
-                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="MM/YY"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">
-                          CVV
-                        </label>
-                        <div className="relative">
-                          <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                          <input
-                            type="text"
-                            name="cvv"
-                            value={formData.cvv}
-                            onChange={handleInputChange}
-                            required
-                            className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="123"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Cardholder Name
-                      </label>
-                      <input
-                        type="text"
-                        name="cardName"
-                        value={formData.cardName}
-                        onChange={handleInputChange}
-                        required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="Name on card"
-                      />
-                    </div>
-                  </div>
-                </div>
-
                 <button
                   type="submit"
                   disabled={isProcessing}
                   className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                 >
-                  {isProcessing ? 'Processing Payment...' : `Pay $${total.toFixed(2)}`}
+                  {isProcessing ? 'Processing...' : `Pay ₹${total.toFixed(2)}`}
                 </button>
               </form>
             </div>
@@ -303,7 +284,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
                       <p className="text-gray-600 text-sm">Qty: {item.quantity}</p>
                     </div>
                     <span className="font-medium">
-                      ${(item.product.price * item.quantity).toFixed(2)}
+                      ₹{(item.product.price * item.quantity).toFixed(2)}
                     </span>
                   </div>
                 ))}
@@ -312,7 +293,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
                   <div className="flex justify-between items-center">
                     <span className="font-semibold text-lg">Total:</span>
                     <span className="font-bold text-xl text-blue-600">
-                      ${total.toFixed(2)}
+                      ₹{total.toFixed(2)}
                     </span>
                   </div>
                 </div>

@@ -12,7 +12,7 @@ export const generatePDFReceipt = async (order: Order): Promise<void> => {
   
   // Order details
   doc.setFontSize(12);
-  doc.text(`Order ID: ${order.id}`, 20, 55);
+  doc.text(`Order ID: ${order._id}`, 20, 55);
   doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 20, 65);
   doc.text(`Payment ID: ${order.paymentId}`, 20, 75);
   doc.text(`Status: ${order.status}`, 20, 85);
@@ -43,5 +43,5 @@ export const generatePDFReceipt = async (order: Order): Promise<void> => {
   doc.text('For support, contact us at support@shophub.com', 20, yPosition + 40);
   
   // Save the PDF
-  doc.save(`receipt-${order.id}.pdf`);
+  doc.save(`receipt-${order._id}.pdf`);
 };

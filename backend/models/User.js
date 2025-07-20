@@ -23,6 +23,23 @@ const userSchema = new mongoose.Schema({
     minlength: [8, 'Password must be at least 8 characters'],
     select: false // This ensures the password is not returned in queries by default
   },
+  phone: {
+    type: String,
+    required: [true, 'Please provide your phone number'],
+    validate: {
+      validator: function(v) {
+        // Simple regex for phone number validation (10-15 digits, can be improved)
+        return /^\d{10,15}$/.test(v);
+      },
+      message: 'Please provide a valid phone number'
+    },
+    trim: true
+  },
+  address: {
+    type: String,
+    required: [true, 'Please provide your address'],
+    trim: true
+  },
   createdAt: {
     type: Date,
     default: Date.now

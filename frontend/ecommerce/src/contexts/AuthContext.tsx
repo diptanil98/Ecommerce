@@ -6,7 +6,7 @@ import axios from "axios";
 
 interface AuthContextType extends AuthState {
   login: (email: string, password: string) => Promise<boolean>;
-  register: (name: string, email: string, password: string) => Promise<boolean>;
+  register: (name: string, email: string, password: string, phone: string, address: string) => Promise<boolean>;
   logout: () => void;
   forgotPassword: (email: string) => Promise<boolean>;
   updateProfile: (userData: Partial<User>) => void;
@@ -72,10 +72,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const register = async (name: string, email: string, password: string): Promise<boolean> => {
+  const register = async (name: string, email: string, password: string, phone: string, address: string): Promise<boolean> => {
     dispatch({ type: 'LOGIN_START' });
     try {
-      const res = await axios.post(`${API_URL}/register`, { fullName: name, email, password });
+      const res = await axios.post(`${API_URL}/register`, { fullName: name, email, password, phone, address });
       const { token, data } = res.data;
       localStorage.setItem('token', token);
       localStorage.setItem('user', JSON.stringify(data.user));

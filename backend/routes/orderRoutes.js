@@ -2,6 +2,7 @@ const express = require('express');
 const Razorpay = require('razorpay');
 const Order = require('../models/order');
 const router = express.Router();
+router.use(express.json());
 
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
@@ -16,7 +17,9 @@ router.post('/create-order', async (req, res) => {
     const order = await razorpay.orders.create(options);
     res.json(order);
   } catch (err) {
-    res.status(500).json({ error: 'Failed to create Razorpay order' });
+    res.status(500).json(
+      
+      { error: 'Failed to create Razorpay order' });
   }
 });
 

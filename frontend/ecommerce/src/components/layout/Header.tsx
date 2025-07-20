@@ -94,7 +94,7 @@ export const Header: React.FC<HeaderProps> = ({
                   >
                     <User size={24} />
                     <span className="hidden sm:block text-sm font-medium text-gray-700">
-                      {user?.name}
+                      {user?.fullName}
                     </span>
                   </button>
 
