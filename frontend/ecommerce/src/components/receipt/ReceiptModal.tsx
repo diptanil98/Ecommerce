@@ -62,7 +62,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ isOpen, onClose, ord
             <div className="grid grid-cols-2 gap-4 mb-4">
               <div>
                 <h4 className="font-medium text-gray-900 mb-1">Order ID</h4>
-                <p className="text-gray-600">{order.id}</p>
+                <p className="text-gray-600">{order._id}</p>
               </div>
               <div>
                 <h4 className="font-medium text-gray-900 mb-1">Order Date</h4>
@@ -84,28 +84,24 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ isOpen, onClose, ord
 
             <div className="mb-4">
               <h4 className="font-medium text-gray-900 mb-1">Shipping Address</h4>
-              <p className="text-gray-600">{order.shippingAddress}</p>
+              <p className="text-gray-600">{order.address}</p>
             </div>
           </div>
 
           <div className="mb-6">
             <h4 className="font-medium text-gray-900 mb-3">Order Items</h4>
             <div className="space-y-3">
-              {order.items.map((item) => (
-                <div key={item.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                  <img
-                    src={item.product.image}
-                    alt={item.product.name}
-                    className="w-12 h-12 object-cover rounded"
-                  />
+              {order.products.map((item, idx) => (
+                <div key={item.productId || idx} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                  <img src={item.image} alt={item.name} className="w-12 h-12 object-cover rounded" />
                   <div className="flex-1">
-                    <h5 className="font-medium text-gray-900">{item.product.name}</h5>
+                    <h5 className="font-medium text-gray-900">{item.name}</h5>
                     <p className="text-gray-600 text-sm">
-                      ${item.product.price.toFixed(2)} × {item.quantity}
+                      ₹{item.price.toFixed(2)} × {item.quantity}
                     </p>
                   </div>
                   <span className="font-medium">
-                    ${(item.product.price * item.quantity).toFixed(2)}
+                    ₹{(item.price * item.quantity).toFixed(2)}
                   </span>
                 </div>
               ))}
@@ -116,7 +112,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ isOpen, onClose, ord
             <div className="flex justify-between items-center">
               <span className="text-xl font-semibold text-gray-900">Total:</span>
               <span className="text-2xl font-bold text-blue-600">
-                ${order.total.toFixed(2)}
+                ${typeof order.amount === 'number' ? order.amount.toFixed(2) : '0.00'}
               </span>
             </div>
           </div>

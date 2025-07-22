@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { User, Package, MapPin, Phone, Mail, Calendar, CreditCard, Download, Eye, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
+import axios from 'axios';
 import type { Order } from '../../types';
 import { generatePDFReceipt } from '../../utils/pdfGenerator';
 import toast from 'react-hot-toast';
@@ -20,26 +21,42 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
   const [formData, setFormData] = useState({
     name: user?.fullName || '',
     email: user?.email || '',
-    phone: user?.phone || '',
+    phone: user?.phoneNumber || '',
     address: user?.address || ''
   });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user) {
       // Load orders from localStorage
       const allOrders = JSON.parse(localStorage.getItem('orders') || '[]');
-      const userOrders = allOrders.filter((order: Order) => order.userId === user.id);
+      const userOrders = allOrders.filter((order: Order) => order.userId === user._id);
       setOrders(userOrders);
       
       // Update form data when user changes
       setFormData({
         name: user.fullName || '',
         email: user.email || '',
-        phone: user.phone || '',
+        phone: user.phoneNumber || '',
         address: user.address || ''
       });
     }
   }, [user]);
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!user?._id) return;
+      try {
+        const res = await axios.get(`http://localhost:8765/orders/user/${user._id}`);
+        setOrders(res.data || []);
+      } catch (err) {
+        setOrders([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchOrders();
+  }, [user?._id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({
@@ -115,7 +132,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
               className={`px-6 py-3 rounded-lg font-medium transition-all ${
                 activeTab === 'orders'
                   ? 'bg-white text-blue-600'
-                  : 'bg-white bg-opacity-20 text-white hover:bg-opacity-30'
+                  : 'bg-white bg-opacity-20 text-black hover:bg-opacity-30'
               }`}
             >
               Order History ({orders.length})
@@ -190,7 +207,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
                     />
                   ) : (
                     <div className="bg-gray-50 px-4 py-3 rounded-lg">
-                      {user.phone || 'Not provided'}
+                      {user.phoneNumber || 'Not provided'}
                     </div>
                   )}
                 </div>
@@ -255,7 +272,9 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
                 </div>
               </div>
 
-              {orders.length === 0 ? (
+              {loading ? (
+                <p>Loading orders...</p>
+              ) : orders.length === 0 ? (
                 <div className="text-center py-12">
                   <Package className="mx-auto text-gray-400 mb-4" size={48} />
                   <h4 className="text-lg font-medium text-gray-900 mb-2">No orders yet</h4>
@@ -264,19 +283,19 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
               ) : (
                 <div className="space-y-4">
                   {orders.map((order) => (
-                    <div key={order.id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
+                    <div key={order._id} className="bg-white border border-gray-200 rounded-lg p-6 hover:shadow-md transition-shadow">
                       <div className="flex justify-between items-start mb-4">
                         <div>
                           <h4 className="font-semibold text-gray-900 mb-1">
-                            Order #{order.id}
+                            Order #{order.products[0].productId}
                           </h4>
                           <p className="text-sm text-gray-600">
-                            {new Date(order.createdAt).toLocaleDateString()} • {order.items.length} items
+                            {new Date(order.createdAt).toLocaleDateString()} • {order.products.length} items
                           </p>
                         </div>
                         <div className="text-right">
                           <div className="text-xl font-bold text-gray-900 mb-2">
-                            ${order.total.toFixed(2)}
+                            ${order.amount.toFixed(2)}
                           </div>
                           <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
                             {order.status}
@@ -291,13 +310,13 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
                         </div>
                         <div>
                           <h5 className="font-medium text-gray-900 mb-1">Shipping Address</h5>
-                          <p className="text-sm text-gray-600">{order.shippingAddress}</p>
+                          <p className="text-sm text-gray-600">{order.address}</p>
                         </div>
                         <div>
                           <h5 className="font-medium text-gray-900 mb-1">Items</h5>
                           <p className="text-sm text-gray-600">
-                            {order.items.slice(0, 2).map(item => item.product.name).join(', ')}
-                            {order.items.length > 2 && ` +${order.items.length - 2} more`}
+                            {order.products.slice(0, 2).map(item => item.name).join(', ')}
+                            {order.products.length > 2 && ` +${order.products.length - 2} more`}
                           </p>
                         </div>
                       </div>
@@ -334,7 +353,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
             <div className="p-6">
               <div className="flex justify-between items-center mb-6">
                 <h3 className="text-xl font-semibold text-gray-900">
-                  Order Details #{selectedOrder.id}
+                  Order Details #{selectedOrder._id}
                 </h3>
                 <button
                   onClick={() => setSelectedOrder(null)}
@@ -362,28 +381,28 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
                   </div>
                   <div>
                     <h4 className="font-medium text-gray-900 mb-1">Total Amount</h4>
-                    <p className="text-xl font-bold text-blue-600">${selectedOrder.total.toFixed(2)}</p>
+                    <p className="text-xl font-bold text-blue-600">${selectedOrder.amount.toFixed(2)}</p>
                   </div>
                 </div>
 
                 <div>
                   <h4 className="font-medium text-gray-900 mb-3">Items Ordered</h4>
                   <div className="space-y-3">
-                    {selectedOrder.items.map((item) => (
-                      <div key={item.id} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+                    {selectedOrder.products.map((item) => (
+                      <div key={item.productId} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
                         <img
-                          src={item.product.image}
-                          alt={item.product.name}
+                          src={item.image}
+                          alt={item.name}
                           className="w-16 h-16 object-cover rounded"
                         />
                         <div className="flex-1">
-                          <h5 className="font-medium text-gray-900">{item.product.name}</h5>
+                          <h5 className="font-medium text-gray-900">{item.name}</h5>
                           <p className="text-gray-600 text-sm">
-                            ${item.product.price.toFixed(2)} × {item.quantity}
+                            ${item.price.toFixed(2)} × {item.quantity}
                           </p>
                         </div>
                         <span className="font-medium">
-                          ${(item.product.price * item.quantity).toFixed(2)}
+                          ${(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
                     ))}
@@ -392,7 +411,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
 
                 <div>
                   <h4 className="font-medium text-gray-900 mb-1">Shipping Address</h4>
-                  <p className="text-gray-600">{selectedOrder.shippingAddress}</p>
+                  <p className="text-gray-600">{selectedOrder.address}</p>
                 </div>
               </div>
             </div>

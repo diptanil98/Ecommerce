@@ -15,6 +15,7 @@ interface CheckoutModalProps {
 export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, onOrderComplete }) => {
   const { items, total, clearCart } = useCart();
   const { user } = useAuth();
+ 
   
   const [formData, setFormData] = useState({
     email: user?.email || '',
@@ -31,6 +32,8 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
+ 
+
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -82,12 +85,15 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
               products: items.map(item => ({
                 productId: item.product.id,
                 quantity: item.quantity,
-                price: item.product.price
+                price: item.product.price,
+                name: item.product.name,
+                image: item.product.image
               })),
               amount: total,
               paymentId: response.razorpay_payment_id,
               orderId: razorpayOrderId,
-              status: 'paid'
+              status: 'paid',
+              address: formData.address
             });
 
             // Clear cart
@@ -104,7 +110,9 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
         prefill: {
           name: formData.name,
           email: formData.email,
-          contact: formData.phone
+          contact: formData.phone,
+          city: formData.city,
+          zip: formData.zipCode
         },
         notes: {
           address: `${formData.address}, ${formData.city}, ${formData.zipCode}`

@@ -7,29 +7,29 @@ export const sendReceiptEmail = async (order: Order): Promise<void> => {
   // In a real application, this would integrate with an email service
   // For demo purposes, we'll just log the email content
   console.log('Email sent to user with order details:', {
-    orderId: order.id,
-    total: order.total,
-    items: order.items.length,
+    orderId: order._id,
+    total: order.amount,
+    items: order.products.length,
     recipient: 'user@example.com'
   });
   
   // Store email in localStorage for demo
   const emailLog = {
     to: 'user@example.com',
-    subject: `Order Receipt - ${order.id}`,
+    subject: `Order Receipt - ${order._id}`,
     body: `
       Thank you for your order!
       
-      Order ID: ${order.id}
+      Order ID: ${order._id}
       Date: ${new Date(order.createdAt).toLocaleDateString()}
-      Total: $${order.total.toFixed(2)}
-      
+      Total: $${order.amount.toFixed(2)}
+
       Items:
-      ${order.items.map(item => 
-        `- ${item.product.name} (${item.quantity}x) - $${(item.product.price * item.quantity).toFixed(2)}`
+      ${order.products.map(item => 
+        `- ${item.name} (${item.quantity}x) - $${(item.price * item.quantity).toFixed(2)}`
       ).join('\n')}
       
-      Shipping Address: ${order.shippingAddress}
+      Shipping Address: ${order.address}
       
       Thank you for shopping with ShopHub!
     `,

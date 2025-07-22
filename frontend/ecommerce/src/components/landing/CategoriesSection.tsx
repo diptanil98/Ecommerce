@@ -13,7 +13,7 @@ const categories = [
     icon: Coffee,
     name: 'Clothing',
     description: 'Gourmet and organic',
-    image: 'https://images.pexels.com/photos/1695052/pexels-photo-1695052.jpeg?auto=compress&cs=tinysrgb&w=500',
+    image: 'https://images.pexels.com/photos/996329/pexels-photo-996329.jpeg',
     color: 'from-orange-500 to-red-500'
   },
   {
@@ -81,9 +81,7 @@ export const CategoriesSection: React.FC<CategoriesSectionProps> = ({ onCategory
               </div>
               
               <div className="absolute inset-0 flex flex-col justify-center items-center text-white p-6">
-                <div className="bg-white bg-opacity-20 rounded-full p-4 mb-4 group-hover:scale-110 transition-transform duration-300">
-                  <category.icon size={32} />
-                </div>
+                
                 <h3 className="text-2xl font-bold mb-2">{category.name}</h3>
                 <p className="text-center opacity-90">{category.description}</p>
                 <div className="mt-4 bg-white text-gray-900 px-6 py-2 rounded-full font-medium opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-300">

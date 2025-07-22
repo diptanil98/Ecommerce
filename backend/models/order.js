@@ -8,6 +8,7 @@ const orderSchema = new mongoose.Schema({
   orderId: { type: String, required: true },
   status: { type: String, default: 'created' },
   createdAt: { type: Date, default: Date.now },
+  address: { type: String, required: true }
 });
 
 module.exports = mongoose.model('Order', orderSchema, 'orders');

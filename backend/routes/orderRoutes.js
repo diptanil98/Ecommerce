@@ -25,9 +25,9 @@ router.post('/create-order', async (req, res) => {
 
 // Save order after payment
 router.post('/save-order', async (req, res) => {
-  const { userId, products, amount, paymentId, orderId, status } = req.body;
+  const { userId, products, amount, paymentId, orderId, status, address } = req.body;
   try {
-    const order = new Order({ userId, products, amount, paymentId, orderId, status });
+    const order = new Order({ userId, products, amount, paymentId, orderId, status, address });
     await order.save();
     res.json({ success: true, order });
   } catch (err) {

@@ -1,5 +1,6 @@
 import jsPDF from 'jspdf';
 import type { Order } from '../types';
+import type { OrderProduct } from '../types';
 
 export const generatePDFReceipt = async (order: Order): Promise<void> => {
   const doc = new jsPDF();
@@ -19,23 +20,23 @@ export const generatePDFReceipt = async (order: Order): Promise<void> => {
   
   // Shipping address
   doc.text('Shipping Address:', 20, 105);
-  doc.text(order.shippingAddress, 20, 115);
+  doc.text(order.address, 20, 115);
   
   // Items table
   doc.text('Items:', 20, 135);
   
   let yPosition = 145;
-  order.items.forEach((item) => {
-    doc.text(`${item.product.name}`, 20, yPosition);
-    doc.text(`$${item.product.price.toFixed(2)} × ${item.quantity}`, 120, yPosition);
-    doc.text(`$${(item.product.price * item.quantity).toFixed(2)}`, 160, yPosition);
+  order.products.forEach((item) => {
+    doc.text(`${item.name}`, 20, yPosition);
+    doc.text(`$${item.price.toFixed(2)} × ${item.quantity}`, 120, yPosition);
+    doc.text(`$${(item.price * item.quantity).toFixed(2)}`, 160, yPosition);
     yPosition += 10;
   });
   
   // Total
   yPosition += 10;
   doc.setFontSize(14);
-  doc.text(`Total: $${order.total.toFixed(2)}`, 20, yPosition);
+  doc.text(`Total: $${order.amount.toFixed(2)}`, 20, yPosition);
   
   // Footer
   doc.setFontSize(10);

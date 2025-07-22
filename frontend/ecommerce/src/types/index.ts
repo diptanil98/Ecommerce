@@ -28,15 +28,23 @@ export interface CartItem {
   quantity: number;
 }
 
+export interface OrderProduct {
+  productId: string;
+  name: string;
+  image: string;
+  price: number;
+  quantity: number;
+}
+
 export interface Order {
-  id: string;
+  _id: string;
   userId: string;
-  items: CartItem[];
-  total: number;
+  products: OrderProduct[];
+  amount: number;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   paymentId?: string;
   createdAt: Date;
-  shippingAddress: string;
+  address: string;
   billingAddress: string;
 }
 
