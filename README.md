@@ -48,8 +48,8 @@ npm run dev
 
 ## 📬 Contact
 Diptanil Sarkar
-Email: your.email@example.com
+Email: diptanilsarkar98@gmail.com
 
-LinkedIn: Your Profile
+LinkedIn: https://www.linkedin.com/in/diptanilsarkar/
 
 Project Link: github.com/diptanil98/Ecommerce
