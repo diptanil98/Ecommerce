@@ -45,23 +45,7 @@ npm run dev
 ~~~
 ## 📂 Project Structure
 
-Ecommerce/
-├── backend/
-│   ├── middleware/        # Authentication
-│   ├── models/            # MongoDB schemas
-│   ├── routes/            # API endpoints
-│   └── server.js          # Express setup
-├── frontend/
-│   ├── src/
-│   │   ├── components/    # Cart, Product, Checkout
-│   │   ├── pages/         # Home, Admin, Dashboard
-│   │   └── contexts/      # Context API
-│   │   └── data/          # Containing categories and brands
-│   │   └── hooks/         # Contaning custom hooks
-│   │   └── types/         # Types
-│   │   └── utils/         # Containing pdf and email generator
-│   └── App.tsx            # Main React component
-└── README.md
+<img width="468" height="338" alt="image" src="https://github.com/user-attachments/assets/fbd2565a-6578-495e-86ef-58207e22c568" />
 
 ## 📬 Contact
 Diptanil Sarkar
