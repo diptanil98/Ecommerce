@@ -1,6 +1,6 @@
 # 🛍️ E-Commerce Platform
 
-A modern, full-stack e-commerce application built with React, Node.js, and MongoDB. Supports user authentication, product management, payments, and admin dashboards.
+A modern, full-stack e-commerce application built with React, Tailwind CSS, TypeScript, Node.js, and MongoDB. Supports user authentication, product management, checkouts and  payments.
 
 ![Project Preview](https://via.placeholder.com/800x400?text=E-Commerce+Screenshot)  
 *(Replace with an actual screenshot or GIF of your project)*
@@ -11,12 +11,11 @@ A modern, full-stack e-commerce application built with React, Node.js, and Mongo
 - **User Authentication**: Login, registration, and JWT-based sessions.
 - **Product Catalog**: Filter, search, and paginate products.
 - **Shopping Cart**: Add/remove items, adjust quantities.
-- **Checkout & Payments**: Integrated with Stripe/PayPal.
-- **Admin Dashboard**: Manage products, orders, and users.
+- **Checkout & Payments**: Integrated with Razorpay.
 - **Responsive Design**: Mobile-friendly UI.
 
 ## 🛠️ Tech Stack
-- **Frontend**: React, Redux, Tailwind CSS  
+- **Frontend**: React, Typescript, Tailwind CSS  
 - **Backend**: Node.js, Express  
 - **Database**: MongoDB (Mongoose)  
 - **Auth**: JWT, Bcrypt  
