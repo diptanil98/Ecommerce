@@ -52,4 +52,4 @@ Email: diptanilsarkar98@gmail.com
 
 LinkedIn: https://www.linkedin.com/in/diptanilsarkar/
 
-Project Link: github.com/diptanil98/Ecommerce
+Project Link: https://github.com/diptanil98
