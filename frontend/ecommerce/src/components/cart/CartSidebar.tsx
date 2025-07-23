@@ -71,7 +71,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose, onChe
                         {item.product.name}
                       </h4>
                       <p className="text-gray-600 text-sm">
-                        ${item.product.price.toFixed(2)}
+                        ₹{item.product.price.toFixed(2)}
                       </p>
                     </div>
                     <div className="flex items-center space-x-2">

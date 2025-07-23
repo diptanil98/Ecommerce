@@ -122,7 +122,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
               className={`px-6 py-3 rounded-lg font-medium transition-all ${
                 activeTab === 'profile'
                   ? 'bg-white text-blue-600'
-                  : 'bg-white bg-opacity-20 text-white hover:bg-opacity-30'
+                  : 'bg-white bg-opacity-20 text-black hover:bg-opacity-30'
               }`}
             >
               Profile Details
@@ -295,7 +295,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
                         </div>
                         <div className="text-right">
                           <div className="text-xl font-bold text-gray-900 mb-2">
-                            ${order.amount.toFixed(2)}
+                            ₹{order.amount.toFixed(2)}
                           </div>
                           <span className={`px-3 py-1 rounded-full text-sm font-medium ${getStatusColor(order.status)}`}>
                             {order.status}
@@ -381,7 +381,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
                   </div>
                   <div>
                     <h4 className="font-medium text-gray-900 mb-1">Total Amount</h4>
-                    <p className="text-xl font-bold text-blue-600">${selectedOrder.amount.toFixed(2)}</p>
+                    <p className="text-xl font-bold text-blue-600">₹{selectedOrder.amount.toFixed(2)}</p>
                   </div>
                 </div>
 
@@ -398,11 +398,11 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
                         <div className="flex-1">
                           <h5 className="font-medium text-gray-900">{item.name}</h5>
                           <p className="text-gray-600 text-sm">
-                            ${item.price.toFixed(2)} × {item.quantity}
+                            ₹{item.price.toFixed(2)} × {item.quantity}
                           </p>
                         </div>
                         <span className="font-medium">
-                          ${(item.price * item.quantity).toFixed(2)}
+                          ₹{(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
                     ))}

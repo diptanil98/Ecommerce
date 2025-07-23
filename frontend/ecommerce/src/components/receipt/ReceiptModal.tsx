@@ -112,7 +112,7 @@ export const ReceiptModal: React.FC<ReceiptModalProps> = ({ isOpen, onClose, ord
             <div className="flex justify-between items-center">
               <span className="text-xl font-semibold text-gray-900">Total:</span>
               <span className="text-2xl font-bold text-blue-600">
-                ${typeof order.amount === 'number' ? order.amount.toFixed(2) : '0.00'}
+                ₹{typeof order.amount === 'number' ? order.amount.toFixed(2) : '0.00'}
               </span>
             </div>
           </div>
