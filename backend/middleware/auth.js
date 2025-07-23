@@ -3,7 +3,7 @@ const User = require('../models/User');
 
 module.exports = async (req, res, next) => {
   try {
-    // 1) Get token and check if it's there
+   
     let token;
     if (
       req.headers.authorization &&
@@ -19,10 +19,10 @@ module.exports = async (req, res, next) => {
       });
     }
 
-    // 2) Verify token
+    
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // 3) Check if user still exists
+    
     const currentUser = await User.findById(decoded.id);
     if (!currentUser) {
       return res.status(401).json({
@@ -31,7 +31,7 @@ module.exports = async (req, res, next) => {
       });
     }
 
-    // 4) Grant access to protected route
+   
     req.user = currentUser;
     next();
   } catch (err) {

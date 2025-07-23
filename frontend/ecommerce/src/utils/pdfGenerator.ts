@@ -5,24 +5,24 @@ import type { OrderProduct } from '../types';
 export const generatePDFReceipt = async (order: Order): Promise<void> => {
   const doc = new jsPDF();
   
-  // Header
+  
   doc.setFontSize(20);
   doc.text('ShopHub', 20, 20);
   doc.setFontSize(16);
   doc.text('Order Receipt', 20, 35);
   
-  // Order details
+  
   doc.setFontSize(12);
   doc.text(`Order ID: ${order._id}`, 20, 55);
   doc.text(`Date: ${new Date(order.createdAt).toLocaleDateString()}`, 20, 65);
   doc.text(`Payment ID: ${order.paymentId}`, 20, 75);
   doc.text(`Status: ${order.status}`, 20, 85);
   
-  // Shipping address
+  
   doc.text('Shipping Address:', 20, 105);
   doc.text(order.address, 20, 115);
   
-  // Items table
+  
   doc.text('Items:', 20, 135);
   
   let yPosition = 145;
@@ -33,7 +33,7 @@ export const generatePDFReceipt = async (order: Order): Promise<void> => {
     yPosition += 10;
   });
   
-  // Total
+  
   yPosition += 10;
   doc.setFontSize(14);
   doc.text(`Total: ₹${order.amount.toFixed(2)}`, 20, yPosition);

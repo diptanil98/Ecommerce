@@ -107,7 +107,7 @@ export const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose, onChe
               <div className="flex justify-between items-center">
                 <span className="text-lg font-semibold text-gray-900">Total:</span>
                 <span className="text-2xl font-bold text-blue-600">
-                  ${total.toFixed(2)}
+                  ₹{total.toFixed(2)}
                 </span>
               </div>
               
