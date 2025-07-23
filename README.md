@@ -12,7 +12,7 @@ A modern, full-stack e-commerce application built with React, Tailwind CSS, Type
 ![WhatsApp Image 2025-07-23 at 12 30 54_e6c3c395](https://github.com/user-attachments/assets/4fad4d22-0c07-45ae-b5f1-1b94d2cbe7bd)
 ![WhatsApp Image 2025-07-23 at 12 32 02_276e433d](https://github.com/user-attachments/assets/187325e7-8dc3-470b-8f91-d1010155ba9a)
 ![WhatsApp Image 2025-07-23 at 12 32 52_724352d7](https://github.com/user-attachments/assets/081561fb-622e-4758-8997-bcbd37369319)
-![WhatsApp Image 2025-07-23 at 12 33 40_58ab617e](https://github.com/user-attachments/assets/12464d63-6a18-4cb3-a8c0-05723f796550)
+![WhatsApp Image 2025-07-23 at 15 47 42_1bc7043b](https://github.com/user-attachments/assets/ce03d0d5-7034-40e8-bc02-b1e1bef52f44)
 ![WhatsApp Image 2025-07-23 at 12 36 29_a3611442](https://github.com/user-attachments/assets/186dd577-a978-4043-b31e-c562ab14d2d6)
 ![WhatsApp Image 2025-07-23 at 12 38 53_72a326aa](https://github.com/user-attachments/assets/2d494784-39e6-4e8a-adac-732bf6c5b01e)
 ![WhatsApp Image 2025-07-23 at 12 39 52_cc8d81dd](https://github.com/user-attachments/assets/5452f85e-a1a5-4ffc-9d34-a0d6a85df244)
