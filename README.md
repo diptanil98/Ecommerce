@@ -1,4 +1,4 @@
-# 🛍️ E-Commerce Platform
+# 🛍️ E-Commerce Platform(ShopHub)
 
 A modern, full-stack e-commerce application built with React, Tailwind CSS, TypeScript, Node.js, and MongoDB. Supports user authentication, product management, checkouts and  payments.
 
