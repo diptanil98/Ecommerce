@@ -59,7 +59,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
         throw new Error('Razorpay SDK failed to load');
       }
 
-      const orderResponse = await axios.post('http://localhost:8765/orders/create-order', {
+      const orderResponse = await axios.post('https://ecommerce-backend-wv48.onrender.com/orders/create-order', {
         amount: total,
         currency: 'INR',
         receipt: `order_${Date.now()}`,
@@ -76,7 +76,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
         order_id: razorpayOrderId,
         handler: async (response: any) => {
           try {
-            const savedOrder = await axios.post('http://localhost:8765/orders/save-order', {
+            const savedOrder = await axios.post('https://ecommerce-backend-wv48.onrender.com/orders/save-order', {
               userId: user?._id,
               products: items.map(item => ({
                 productId: item.product.id,

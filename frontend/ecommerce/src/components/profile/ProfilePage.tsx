@@ -47,7 +47,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({ isOpen, onClose }) => 
     const fetchOrders = async () => {
       if (!user?._id) return;
       try {
-        const res = await axios.get(`http://localhost:8765/orders/user/${user._id}`);
+        const res = await axios.get(`https://ecommerce-backend-wv48.onrender.com/orders/user/${user._id}`);
         setOrders(res.data || []);
       } catch (err) {
         setOrders([]);

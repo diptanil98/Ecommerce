@@ -7,7 +7,7 @@ export function useDisplayProduct() {
     const [loading,setLoading] = useState(false);
 
     useEffect(()=>{
-        axios.get("http://localhost:8765/products")
+        axios.get("https://ecommerce-backend-wv48.onrender.com/products")
         .then((res)=>{
             setProducts(res.data);
             setLoading(false);

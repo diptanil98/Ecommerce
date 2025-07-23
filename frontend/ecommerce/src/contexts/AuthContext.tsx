@@ -53,7 +53,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     getProfile();
   }, []);
 
-  const API_URL = "http://localhost:8765/users";
+  const API_URL = "https://ecommerce-backend-wv48.onrender.com/users";
 
   const login = async (email: string, password: string): Promise<boolean> => {
     dispatch({ type: 'LOGIN_START' });
