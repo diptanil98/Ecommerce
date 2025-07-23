@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import type { Order } from '../types';
-import type { OrderProduct } from '../types';
+
 
 export const generatePDFReceipt = async (order: Order): Promise<void> => {
   const doc = new jsPDF();
