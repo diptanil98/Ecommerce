@@ -38,11 +38,11 @@ export const generatePDFReceipt = async (order: Order): Promise<void> => {
   doc.setFontSize(14);
   doc.text(`Total: ₹${order.amount.toFixed(2)}`, 20, yPosition);
 
-  // Footer
+  
   doc.setFontSize(10);
   doc.text('Thank you for your purchase!', 20, yPosition + 30);
   doc.text('For support, contact us at support@shophub.com', 20, yPosition + 40);
   
-  // Save the PDF
+  
   doc.save(`receipt-${order._id}.pdf`);
 };

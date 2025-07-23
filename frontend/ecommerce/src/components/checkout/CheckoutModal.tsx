@@ -54,13 +54,11 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
     setIsProcessing(true);
 
     try {
-      // Load Razorpay script
       const razorpayLoaded = await loadRazorpayScript();
       if (!razorpayLoaded) {
         throw new Error('Razorpay SDK failed to load');
       }
 
-      // Create Razorpay order
       const orderResponse = await axios.post('http://localhost:8765/orders/create-order', {
         amount: total,
         currency: 'INR',
@@ -69,7 +67,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
 
       const { id: razorpayOrderId, currency, amount } = orderResponse.data;
 
-      // Razorpay options
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: amount.toString(),
@@ -79,7 +76,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
         order_id: razorpayOrderId,
         handler: async (response: any) => {
           try {
-            // Save order to backend
             const savedOrder = await axios.post('http://localhost:8765/orders/save-order', {
               userId: user?._id,
               products: items.map(item => ({
@@ -96,7 +92,6 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
               address: formData.address
             });
 
-            // Clear cart
             clearCart();
 
             toast.success('Payment successful! Order placed.');
@@ -122,7 +117,7 @@ export const CheckoutModal: React.FC<CheckoutModalProps> = ({ isOpen, onClose, o
         }
       };
 
-      // Open Razorpay payment modal
+      
       const razorpayInstance = new (window as any).Razorpay(options);
       razorpayInstance.open();
 

@@ -17,7 +17,7 @@ export const useProducts = () => {
 
   const filteredProducts = useMemo(() => {
     let filtered = products.filter(product => {
-      // Search filter
+      
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
         const matchesSearch = 
@@ -30,27 +30,27 @@ export const useProducts = () => {
         if (!matchesSearch) return false;
       }
 
-      // Category filter
+      
       if (filters.category !== 'All' && product.category !== filters.category) {
         return false;
       }
 
-      // Brand filter
+      
       if (filters.brand !== 'All' && product.brand !== filters.brand) {
         return false;
       }
 
-      // Price range filter
+      
       if (product.price < filters.priceRange[0] || product.price > filters.priceRange[1]) {
         return false;
       }
 
-      // Rating filter
+  
       if (product.rating < filters.rating) {
         return false;
       }
 
-      // Stock filter
+      
       if (filters.inStock && !product.inStock) {
         return false;
       }
@@ -58,7 +58,7 @@ export const useProducts = () => {
       return true;
     });
 
-    // Sort products
+    
     filtered.sort((a, b) => {
       let aValue: any, bValue: any;
       
