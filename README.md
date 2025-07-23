@@ -20,23 +20,6 @@ A modern, full-stack e-commerce application built with React, Tailwind CSS, Type
 ![WhatsApp Image 2025-07-23 at 12 43 27_e164b4dd](https://github.com/user-attachments/assets/beb40575-6475-43db-8a40-e6578134718b)
 ![WhatsApp Image 2025-07-23 at 12 44 18_a9e9a4fa](https://github.com/user-attachments/assets/2a7793be-48ff-408e-afe3-d630e3e59180)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ---
 
 ## 🚀 Features
@@ -76,7 +59,7 @@ npm run dev
 ~~~
 ## 📂 Project Structure
 
-<img width="468" height="338" alt="image" src="https://github.com/user-attachments/assets/fbd2565a-6578-495e-86ef-58207e22c568" />
+<img width="585" height="390" alt="image" src="https://github.com/user-attachments/assets/bde1ea54-83e8-4da4-93fa-6c9edd2b6645" />
 
 ## 📬 Contact
 Diptanil Sarkar
