@@ -2,7 +2,9 @@
 
 A modern, full-stack e-commerce application built with React, Tailwind CSS, TypeScript, Node.js, and MongoDB. Supports user authentication, product management, checkouts and  payments.
 
-![Project Preview](https://via.placeholder.com/800x400?text=E-Commerce+Screenshot)  
+![Project Preview]
+![WhatsApp Image 2025-07-22 at 16 54 07_2f439428](https://github.com/user-attachments/assets/d60b3606-8720-4a44-a011-b9c3bd64651f)
+
 *(Replace with an actual screenshot or GIF of your project)*
 
 ---
