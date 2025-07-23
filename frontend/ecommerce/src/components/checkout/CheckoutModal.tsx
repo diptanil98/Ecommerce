@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, CreditCard, User, MapPin, Mail, Phone, Lock } from 'lucide-react';
+import { X,  User, MapPin, Mail, Phone } from 'lucide-react';
 import { useCart } from '../../contexts/CartContext';
 import { useAuth } from '../../contexts/AuthContext';
 import type { Order } from '../../types';

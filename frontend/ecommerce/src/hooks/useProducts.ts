@@ -1,5 +1,5 @@
-import { useState, useEffect, useMemo } from 'react';
-import type { Product, FilterState } from '../types';
+import { useState,  useMemo } from 'react';
+import type {  FilterState } from '../types';
 import { useDisplayProduct } from './useDisplayProduct';
 
 export const useProducts = () => {
@@ -13,7 +13,7 @@ export const useProducts = () => {
     sortBy: 'name',
     sortOrder: 'asc'
   });
-  const {products,loading} = useDisplayProduct();
+  const {products} = useDisplayProduct();
 
   const filteredProducts = useMemo(() => {
     let filtered = products.filter(product => {

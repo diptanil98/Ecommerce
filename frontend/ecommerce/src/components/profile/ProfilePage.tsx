@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Package, MapPin, Phone, Mail, Calendar, CreditCard, Download, Eye, X } from 'lucide-react';
+import { User, Package, MapPin, Phone, Mail, Calendar, Download, Eye, X } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
 import axios from 'axios';
 import type { Order } from '../../types';

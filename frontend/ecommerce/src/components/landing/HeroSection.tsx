@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowRight, ShoppingBag, Star, Users, Truck } from 'lucide-react';
+import { ArrowRight, Star } from 'lucide-react';
 
 interface HeroSectionProps {
   onGetStarted: () => void;
