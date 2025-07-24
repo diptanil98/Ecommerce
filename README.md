@@ -67,4 +67,4 @@ Email: diptanilsarkar98@gmail.com
 
 LinkedIn: https://www.linkedin.com/in/diptanilsarkar/
 
-Project Link: https://github.com/diptanil98
+Project Link: https://ecommerce-f-ashy.vercel.app/
